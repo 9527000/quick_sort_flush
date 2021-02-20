@@ -2,6 +2,9 @@
 import pygame
 import random
 import time
+
+from com.yw.sort.quicksort.MyButton import BFButton
+
 FPS = 80            # 帧率
 WIN_WIDTH = 1250    # 窗口宽度
 WIN_HEIGHT = 600    # 窗口高度
@@ -170,6 +173,15 @@ class Gui:
         self.lefth=100
         self.rightg=100
         self.bm=BubbleManager(self.win, 100,True,arr)
+        self.button = BFButton(self.win, (120, 180, 160, 40))
+        self.button.text='start sort'
+        self.button.click=self.action
+
+    def action(self,btn):
+        sortList=self.quick_sort(self.bm)
+        self.bm.initBuList()
+        self.bm.bubbleList=sortList
+        self.resultSortList()
 
     def quick_sort(self,bmm):
         """快速排序"""
@@ -213,15 +225,21 @@ class Gui:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:  # 如果单击关闭窗口，则退出
                     pygame.quit()
-                if event.type == pygame.KEYDOWN:  # 点击任意键开始动画
-                    sortList=self.quick_sort(self.bm)
-                    self.bm.initBuList()
-                    self.bm.bubbleList=sortList
-                    self.resultSortList()
+                self.start=True
+                self.button.update(event)
+
+                # self.resultSortList()
+                # if event.type == pygame.KEYDOWN:  # 点击任意键开始动画
+                #     sortList=self.quick_sort(self.bm)
+                #     self.bm.initBuList()
+                #     self.bm.bubbleList=sortList
+                #     self.resultSortList()
+
 
     def updatePyGame(self):         # 更新画布
         self.win.fill(COLORS["bg"])
         self.bm.draw()
+        self.button.draw()
         self.clock.tick(FPS)
         pygame.display.update()
 
